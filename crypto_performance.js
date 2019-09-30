@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const NS_PER_SEC = 1e9;
 
 function runCrypto(iterations) {
   const syncCaseResults = {
