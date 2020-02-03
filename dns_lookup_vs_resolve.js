@@ -1,6 +1,6 @@
 const dns = require('dns');
 
-async function runCrypto(iterations) {
+async function run(iterations) {
   const dnsLookupResults = {
     startTime: null,
     iterationEndTimes: {},
@@ -62,7 +62,7 @@ async function runCrypto(iterations) {
   console.log(`  Execution started at ${dnsResolveResults.startTime}`);
   printIterationTimestamps(dnsResolveResults.iterationEndTimes);
   console.log('\n');
-  }, 6000);
+  }, 10000);
 }
 
 function printIterationTimestamps(result) {
@@ -74,5 +74,5 @@ function printIterationTimestamps(result) {
 if (process.argv && process.argv.length !== 3) {
   throw new Error('Invalid args provided (Expected number of iterations)');
 } else {
-  runCrypto(parseInt(process.argv[2], 10));
+  run(parseInt(process.argv[2], 10));
 }

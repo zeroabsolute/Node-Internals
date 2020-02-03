@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 
-function runCrypto(iterations) {
+function run(iterations) {
   const syncCaseResults = {};
   
   console.log(`\n
@@ -66,5 +66,5 @@ function printIterationTimestamps(result) {
 if (process.argv && process.argv.length !== 3) {
   throw new Error('Invalid args provided (Expected number of iterations)');
 } else {
-  runCrypto(parseInt(process.argv[2], 10));
+  run(parseInt(process.argv[2], 10));
 }
