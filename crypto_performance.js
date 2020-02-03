@@ -1,36 +1,29 @@
 const crypto = require('crypto');
 
 function runCrypto(iterations) {
-  const syncCaseResults = {
-    startTime: null,
-    iterationEndTimes: {},
-  };
+  const syncCaseResults = {};
   
   console.log(`\n
   -----------| SYNC VERSION |-----------
   `);
   
-  syncCaseResults.startTime = Date.now();
-  
   for (let i = 0; i < iterations; i++) {
     console.log(`  Iteration ${i + 1}`);
+    syncCaseResults[i + 1] = { start: Date.now() };
     const key = crypto.pbkdf2Sync('secret', 'salt', 100000, 64, 'sha512');
-    syncCaseResults.iterationEndTimes[i + 1] = Date.now();
+    syncCaseResults[i + 1].end = Date.now();
     console.log(`  Key: ${key.toString('hex')}`);
   }
   
-  const asyncCaseResults = {
-    startTime: null,
-    iterationEndTimes: {},
-  };
+  const asyncCaseResults = {};
   
   console.log(`\n
   -----------| ASYNC VERSION |-----------
   `);
   
-  asyncCaseResults.startTime = Date.now();
-  
   for (let i = 0; i < iterations; i++) {
+    asyncCaseResults[i + 1] = { start: Date.now() };
+
     crypto.pbkdf2('secret', 'salt', 100000, 64, 'sha512', (err, derivedKey) => {
       if (err) {
         throw err;
@@ -38,7 +31,7 @@ function runCrypto(iterations) {
       
       console.log(`  Iteration ${i + 1}`);
       console.log(`  Key: ${derivedKey.toString('hex')}`);
-      asyncCaseResults.iterationEndTimes[i + 1] = Date.now();
+      asyncCaseResults[i + 1].end = Date.now();
     });
   }
   
@@ -48,19 +41,25 @@ function runCrypto(iterations) {
   `);
   
   console.log(`  CASE 1: Sync version`);
-  console.log(`  Execution started at ${syncCaseResults.startTime}`);
-  printIterationTimestamps(syncCaseResults.iterationEndTimes);
+  printIterationTimestamps(syncCaseResults);
   
   console.log(`\n  CASE 2: Async version`);
-  console.log(`  Execution started at ${asyncCaseResults.startTime}`);
-  printIterationTimestamps(asyncCaseResults.iterationEndTimes);
+  printIterationTimestamps(asyncCaseResults);
   console.log('\n');
   }, 5000);
 }
 
 function printIterationTimestamps(result) {
+  let ref = null;
   Object.keys(result).forEach((key) => {
-    console.log(`  Iteration ${key} finished at ${result[key]}`);
+    if (key === '1') {
+      ref = result[key].start;
+    }
+    
+    const start = key === '1' ? 0 : result[key].start - ref;
+    const end = result[key].end - ref;
+
+    console.log(`  Iteration ${key} started at ${start} and ended at ${end}`);
   });
 }
 
