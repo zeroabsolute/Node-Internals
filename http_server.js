@@ -35,7 +35,7 @@ const server = http.createServer((req, res) => {
 });
 
 server.on('connection', (socket) => {
-  console.log(`\n\n\x1b[32mNew client connected with IP: ${socket.address().address} and Port: ${socket.address().port}`);
+  console.log(`\n\n\x1b[32mNew client connected -> IP: ${socket.address().address} and Port: ${socket.address().port}`);
 });
 
 server.listen(8000);
