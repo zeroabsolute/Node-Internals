@@ -1,4 +1,4 @@
-const https = require('https');
+const http = require('http');
 
 function run(iterations) {
   const results = {};
@@ -6,7 +6,7 @@ function run(iterations) {
   for (let i = 0; i < iterations; i++) {
     results[i + 1] = { start: Date.now() };
 
-    https.request('https://nodejs.org/static/images/logo.svg', (res) => {
+    http.request({ host: '104.20.22.46', path: '/static/images/logo.svg' }, (res) => {
       res.on('data', () => {});
       res.on('end', () => {
         results[i + 1].end = Date.now();
